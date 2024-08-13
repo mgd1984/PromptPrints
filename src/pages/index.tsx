@@ -45,12 +45,7 @@ export default function Home() {
           </Link>
         ) : (
           <Link href="/auth/signin">
-            <button
-              onClick={() => {
-                (netlifyIdentity as any).open();
-              }}
-              className="bg-blue-700 hover:bg-blue-900 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-            >
+            <button className="bg-blue-700 hover:bg-blue-900 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75">
               Sign In
             </button>
           </Link>

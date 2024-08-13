@@ -1,20 +1,29 @@
-// pages/api/auth/signin.tsx
-import { NextApiRequest, NextApiResponse } from 'next';
+import React, { useEffect } from 'react';
+import netlifyAuth from '../../../netlifyAuth.js';
 
 export const runtime = 'edge';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === 'POST') {
-    const { email, password } = req.body;
+export default function SignIn() {
+  useEffect(() => {
+    netlifyAuth.initialize((user: any) => {
+      if (user) {
+        // Redirect to home or another page after successful sign-in
+        window.location.href = '/';
+      }
+    });
+  }, []);
 
-    // Perform authentication logic here
-    if (email === 'test@example.com' && password === 'password') {
-      res.status(200).json({ message: 'Sign-in successful' });
-    } else {
-      res.status(401).json({ message: 'Invalid credentials' });
-    }
-  } else {
-    res.setHeader('Allow', ['POST']);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
-  }
+  const handleSignIn = () => {
+    netlifyAuth.authenticate((user: any) => {
+      console.log('Logged in user:', user);
+      window.location.href = '/';
+    });
+  };
+
+  return (
+    <div>
+      <h1>Sign In</h1>
+      <button onClick={handleSignIn}>Sign In with Netlify Identity</button>
+    </div>
+  );
 }
