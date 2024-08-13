@@ -6,8 +6,6 @@ import { Queue } from 'bullmq';
 import dotenv from 'dotenv';
 import { logger } from '../../lib/logger'; // Assume we've set up a logging utility
 
-export const runtime = 'edge';
-
 dotenv.config();
 
 export const config = {
