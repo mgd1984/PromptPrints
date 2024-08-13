@@ -1,5 +1,5 @@
 // pages/api/payments/process.js
-import db from '../../../db';
+import db from '../../../lib/db';
 // import square from 'square-payment'; // Assuming you have square-payment module setup
 
 export default async function handler(req, res) {
