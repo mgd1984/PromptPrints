@@ -16,11 +16,11 @@ const withAuth = (Component: React.ComponentType<any>) => {
     }
 
     useEffect(() => {
-      if (!isAuthenticated) {
-        console.log("User not authenticated, redirecting...");
-        loginWithRedirect();
-      }
-    }, [isAuthenticated, loginWithRedirect]);
+        if (!isAuthenticated && window.location.pathname !== "/auth/callback") {
+          console.log("User not authenticated, redirecting...");
+          loginWithRedirect();
+        }
+      }, [isAuthenticated, loginWithRedirect]);
 
     // Only render the component if the user is authenticated
     if (isAuthenticated) {
