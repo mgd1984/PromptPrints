@@ -1,17 +1,30 @@
-// import { useSession } from 'next-auth/react';
+import React from 'react';
+import { useAuth0 } from '@auth0/auth0-react';
 import Link from 'next/link';
-import netlifyIdentity from 'netlify-identity-widget'; // Import the netlifyIdentity module
-import Image from 'next/image'; // Import the Image component
-import { useEffect, useState } from 'react'; // Import useState for managing tooltip state
+import netlifyIdentity from 'netlify-identity-widget';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 interface User {
   // Define the properties of the User type here
 }
 
 export default function Home() {
-  const [user, setUser] = useState<User | null>(null);
-  const [showTooltip, setShowTooltip] = useState(false); // State for managing tooltip visibility
+  const { loginWithRedirect, logout, user, isAuthenticated } = useAuth0();
+  const [showTooltip, setShowTooltip] = useState(false);
 
+  const setUser = (user: User | null) => {
+    if (user) {
+      // Handle the case when user is not null
+      // Set the user state
+      setUser(user);
+    } else {
+      // Handle the case when user is null
+      // Clear the user state
+      setUser(null);
+    }
+  };
+  
   useEffect(() => {
     netlifyIdentity.on('init', (user) => {
       setUser(user);
@@ -25,19 +38,18 @@ export default function Home() {
         <h1 className="text-7xl font-extrabold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400 animate-gradient">
           Gener8or Studio
         </h1>
-        {/* <p className="text-2xl mb-8 text-gray-400">Prompt-to-Print, Promptly</p> */}
 
         <Image
-          src="/images/img7.png" // Replace with the correct image path
+          src="/images/img7.png"
           alt="Description of image"
-          width={800} // Set the width of the image
-          height={600} // Set the height of the image
+          width={800}
+          height={600}
           className="mx-auto"
         />
 
-        <div className="my-8"></div> {/* Add some room after the image */}
-        
-        {user ? (
+        <div className="my-8"></div>
+
+        {isAuthenticated ? (
           <Link href="/create">
             <button className="bg-purple-700 hover:bg-purple-900 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-75">
               Start a New Print

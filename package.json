@@ -12,6 +12,7 @@
     "deploy": "npm run pages:build && wrangler pages deploy .vercel/output/static"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.2.4",
     "@fal-ai/serverless-client": "^0.14.2",
     "@fal-ai/serverless-proxy": "^0.9.0",
     "@reach/dialog": "^0.18.0",

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import netlifyAuth from '../netlifyAuth.js';
 import * as fal from "@fal-ai/serverless-client";
 import '../styles/globals.css';
+import { Auth0Provider } from '@auth0/auth0-react';
 
 fal.config({
   proxyUrl: "/api/fal/proxy",
@@ -61,14 +62,19 @@ const App = ({ Component, pageProps }: AppProps) => {
   };
 
   return (
-    <Component
-      {...pageProps}
-      loggedIn={loggedIn}
-      user={user}
-      login={login}
-      logout={logout}
-    />
+    <Auth0Provider
+      domain={process.env.NEXT_PUBLIC_AUTH0_DOMAIN || 'YOUR_DEFAULT_DOMAIN'}
+      clientId={process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID || 'YOUR_DEFAULT_CLIENT_ID'}
+    >
+      <Component
+        {...pageProps}
+        loggedIn={loggedIn}
+        user={user}
+        login={login}
+        logout={logout}
+      />
+    </Auth0Provider>
   );
-};
 
+}
 export default App;
