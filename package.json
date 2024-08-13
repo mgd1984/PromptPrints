@@ -20,6 +20,7 @@
     "autoprefixer": "^10.4.20",
     "bullmq": "^5.12.5",
     "dotenv": "^16.4.5",
+    "gotrue-js": "^0.9.29",
     "json-bigint": "^1.0.0",
     "netlify-identity-widget": "^1.9.2",
     "next": "14.2.5",

@@ -1,3 +1,11 @@
+import GoTrue from 'gotrue-js';
+
+const auth = new GoTrue({
+  APIUrl: `${window.location.origin}/.netlify/identity`,
+  audience: '',
+  setCookie: true,
+});
+
 const netlifyAuth = {
   isInitialized: false,
   user: null,
@@ -9,15 +17,13 @@ const netlifyAuth = {
   },
 
   getUser() {
-    const user = JSON.parse(localStorage.getItem('gotrue.user'));
+    const user = auth.currentUser();
     this.user = user;
     return user;
   },
 
   authenticate(callback) {
-    // Redirect to the Netlify Identity login page
-    window.location.href = "/.netlify/identity/login";
-
+    auth.login('', '', true); // This will open the login modal
     window.addEventListener('message', (event) => {
       if (event.data && event.data.includes('authorization')) {
         const user = this.getUser();
@@ -27,13 +33,13 @@ const netlifyAuth = {
   },
 
   signout(callback) {
-    fetch('/.netlify/identity/logout', {
-      method: 'POST',
-    }).then(() => {
-      localStorage.removeItem('gotrue.user');
-      this.user = null;
-      callback();
-    });
+    const user = auth.currentUser();
+    if (user) {
+      user.logout().then(() => {
+        this.user = null;
+        callback();
+      });
+    }
   },
 
   on(event, callback) {
