@@ -14,6 +14,7 @@
   "dependencies": {
     "@fal-ai/serverless-client": "^0.14.2",
     "@fal-ai/serverless-proxy": "^0.9.0",
+    "@reach/dialog": "^0.18.0",
     "@square/web-sdk": "^2.0.1",
     "@stripe/stripe-js": "^4.2.0",
     "bullmq": "^5.12.5",
@@ -22,17 +23,18 @@
     "netlify-identity-widget": "^1.9.2",
     "next": "14.2.5",
     "next-auth": "^4.24.7",
+    "node-cups": "^1.2.3",
     "pg": "^8.12.0",
     "react": "^18",
     "react-dom": "^18",
     "react-netlify-identity-widget": "^0.2.7",
     "square": "^37.1.1",
-    "stripe": "^16.6.0",  
+    "stripe": "^16.6.0",
     "ui": "github:shadcn/ui",
-    "winston": "^3.14.1",
-    "@reach/dialog": "^0.18.0"
+    "winston": "^3.14.1"
   },
   "devDependencies": {
+    "@cloudflare/next-on-pages": "latest",
     "@types/json-bigint": "^1.0.4",
     "@types/micro": "^10.0.0",
     "@types/netlify-identity-widget": "^1.9.6",
@@ -42,7 +44,6 @@
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
-    "@cloudflare/next-on-pages": "latest",
-    "wrangler": "^2.0.0" 
+    "wrangler": "^2.0.0"
   }
 }
