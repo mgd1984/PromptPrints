@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import netlifyAuth from '../netlifyAuth.js';
+import netlifyAuth from '../netlifyAuth';
 
 const NetlifyAuthClient = ({ onAuth }: { onAuth: (user: any) => void }) => {
   useEffect(() => {
