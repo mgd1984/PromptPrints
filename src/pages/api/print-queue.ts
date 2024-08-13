@@ -1,4 +1,6 @@
 import { config } from 'dotenv';
+import fs from 'fs';
+import { NextApiRequest, NextApiResponse } from 'next';
 config();
 
 // Set up CUPS connection
@@ -9,7 +11,7 @@ const cups = require('node-cups')({
   password: process.env.CUPS_PASSWORD || ''
 });
 
-export default async function handler(req, res) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     const { filePath, printerName } = req.body;
     if (!filePath || !printerName) {
