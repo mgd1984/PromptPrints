@@ -2,6 +2,7 @@ let netlifyIdentity;
 
 if (typeof window !== 'undefined') {
   netlifyIdentity = require('netlify-identity-widget');
+  netlifyIdentity.init();
 }
 
 const netlifyAuth = {
@@ -14,7 +15,6 @@ const netlifyAuth = {
         this.isAuthenticated = !!user;
         callback(user);
       });
-      netlifyIdentity.init();
     }
   },
   authenticate(callback) {
