@@ -1,47 +1,47 @@
-let netlifyIdentity;
-
-if (typeof window !== 'undefined') {
-  netlifyIdentity = require('netlify-identity-widget');
-  netlifyIdentity.init();
-  console.log('netlifyIdentity initialized:', netlifyIdentity);
-}
+// netlifyAuth.js
+import netlifyIdentity from 'netlify-identity-widget';
 
 const netlifyAuth = {
-  isAuthenticated: false,
+  isInitialized: false,
   user: null,
+
   initialize(callback) {
-    if (netlifyIdentity) {
-      console.log('netlifyIdentity.on:', netlifyIdentity.on);
-      netlifyIdentity.on('init', user => {
-        this.user = user;
-        this.isAuthenticated = !!user;
-        callback(user);
-      });
-    }
+    netlifyIdentity.init();
+    netlifyIdentity.on('init', (user) => {
+      this.user = user;
+      this.isInitialized = true;
+      callback(user);
+    });
+    netlifyIdentity.on('login', (user) => {
+      this.user = user;
+      callback(user);
+    });
   },
+
   authenticate(callback) {
-    if (netlifyIdentity) {
-      netlifyIdentity.open();
-      console.log('netlifyIdentity.on:', netlifyIdentity.on);
-      netlifyIdentity.on('login', user => {
-        this.user = user;
-        this.isAuthenticated = true;
-        callback(user);
-        netlifyIdentity.close();
-      });
-    }
+    netlifyIdentity.open();
+    netlifyIdentity.on('login', (user) => {
+      this.user = user;
+      callback(user);
+      netlifyIdentity.close();
+    });
   },
+
   signout(callback) {
-    if (netlifyIdentity) {
-      netlifyIdentity.logout();
-      console.log('netlifyIdentity.on:', netlifyIdentity.on);
-      netlifyIdentity.on('logout', () => {
-        this.user = null;
-        this.isAuthenticated = false;
-        callback();
-      });
-    }
-  }
+    netlifyIdentity.logout();
+    netlifyIdentity.on('logout', () => {
+      this.user = null;
+      callback();
+    });
+  },
+
+  on(event, callback) {
+    netlifyIdentity.on(event, callback);
+  },
+
+  off(event, callback) {
+    netlifyIdentity.off(event, callback);
+  },
 };
 
 export default netlifyAuth;
