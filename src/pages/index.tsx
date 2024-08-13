@@ -1,12 +1,23 @@
-import { useSession } from 'next-auth/react';
+// import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import netlifyIdentity from 'netlify-identity-widget'; // Import the netlifyIdentity module
 import Image from 'next/image'; // Import the Image component
-import { useState } from 'react'; // Import useState for managing tooltip state
+import { useEffect, useState } from 'react'; // Import useState for managing tooltip state
+
+interface User {
+  // Define the properties of the User type here
+}
 
 export default function Home() {
-  const { data: session } = useSession();
+  const [user, setUser] = useState<User | null>(null);
   const [showTooltip, setShowTooltip] = useState(false); // State for managing tooltip visibility
+
+  useEffect(() => {
+    netlifyIdentity.on('init', (user) => {
+      setUser(user);
+    });
+    netlifyIdentity.init();
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-gray-900 to-black text-white">
@@ -26,7 +37,7 @@ export default function Home() {
 
         <div className="my-8"></div> {/* Add some room after the image */}
         
-        {session ? (
+        {user ? (
           <Link href="/create">
             <button className="bg-purple-700 hover:bg-purple-900 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-opacity-75">
               Start a New Print

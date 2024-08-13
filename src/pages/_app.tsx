@@ -1,5 +1,4 @@
 // File: pages/_app.tsx
-import { SessionProvider } from 'next-auth/react';
 import { AppProps } from 'next/app';
 import { useEffect, useState } from 'react';
 import netlifyAuth from '../netlifyAuth.js';
@@ -21,48 +20,48 @@ interface User {
     };
   }
   
-  const App = ({ Component, pageProps: { session, ...pageProps } }: AppProps) => {
+  const App = ({ Component, pageProps }: AppProps) => {
     const [loggedIn, setLoggedIn] = useState(false);
     const [user, setUser] = useState<User | null>(null);
-  
+
     useEffect(() => {
       const handleLogin = (user: User) => {
         setLoggedIn(true);
         setUser(user);
         console.log('Logged in user:', user);
       };
-  
+
       const handleLogout = () => {
         setLoggedIn(false);
         setUser(null);
         console.log('User logged out');
       };
-  
+
       (netlifyAuth as any).on('login', handleLogin);
       (netlifyAuth as any).on('logout', handleLogout);
-  
+
       return () => {
         (netlifyAuth as any).off('login', handleLogin);
         (netlifyAuth as any).off('logout', handleLogout);
       };
     }, []);
-  
+
     const login = () => {
       netlifyAuth.authenticate((user: User) => {
         setLoggedIn(!!user);
         setUser(user);
       });
     };
-  
+
     const logout = () => {
       netlifyAuth.signout(() => {
         setLoggedIn(false);
         setUser(null);
       });
     };
-  
+
     return (
-      <SessionProvider session={session}>
+      <>
         {loggedIn ? (
           <div>
             <p>You are logged in!</p>
@@ -73,7 +72,7 @@ interface User {
           <button onClick={login}>Log in here</button>
         )}
         <Component {...pageProps} />
-      </SessionProvider>
+      </>
     );
   };
   
