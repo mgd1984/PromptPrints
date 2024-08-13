@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "pages:build": "npx @cloudflare/next-on-pages",
+    "preview": "npm run pages:build && wrangler pages dev",
+    "deploy": "npm run pages:build && wrangler pages deploy"
   },
   "dependencies": {
     "@fal-ai/serverless-client": "^0.14.2",
@@ -24,9 +27,11 @@
     "react-dom": "^18",
     "react-netlify-identity-widget": "^0.2.7",
     "square": "^37.1.1",
-    "stripe": "^16.6.0",
+    "stripe": "^16.6.0",  
     "ui": "github:shadcn/ui",
-    "winston": "^3.14.1"
+    "winston": "^3.14.1",
+    "@reach/dialog": "^0.18.0"
+
   },
   "devDependencies": {
     "@types/json-bigint": "^1.0.4",
