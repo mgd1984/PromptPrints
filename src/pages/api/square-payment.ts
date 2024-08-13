@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { Client, Environment, CreatePaymentRequest } from 'square';
 import JSONBig from 'json-bigint';
 
+export const runtime = 'edge';
+
 const crypto = require('crypto');
 
 const client = new Client({

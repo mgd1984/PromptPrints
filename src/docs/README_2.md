@@ -87,7 +87,7 @@ graph TD
 
 ## Overview
 
-This repo contains code & documentation for Gener8or Studios' prompt-to-print business model. The system allows users to generate custom art using AI, customize it, and order high-quality prints on-the-spot. This README provides a comprehensive guide to the workflow.
+This repo contains code & documentation for Gener8or Studios' prompt-to-print business model. The system allows users to create mind-blowing generative art works, customize them, and order high-quality prints on-the-spot. This README provides a comprehensive guide to the workflow.
 
 ## Table of Contents
 
@@ -113,23 +113,86 @@ The prompt-to-print workflow is built on a modular architecture that integrates 
 - Customer Relationship Management (CRM) System
 
 ## Completed Features:
-- **Authentication Provider** Integrated Netlify Identity for user authentication, session management, role-based access controls (using JWT) 
-- **Inference Engine** Integrated the FAL.ai Node.js SDK with Proxy Mode configured to protect API keys in production
-- **Image Rendering** Successfully generated and displayed images in the Next.js UI 
-- **Inference Optimization** Slashed inference time and cost by switching to Flux.1|Dev model after testing with Flux.1|Pro
-- **Model Selector** Implemented drop-down selector for Flux.1|Pro & Flux.1|Dev model options
-- [**ENHANCE**] Created Image Upscaler Component (needs to be integrated into print order flow)
-- **Print Previewer** Added a print preview page with page, size, and format selector
-- **Token Store** Added a payments page with an option to purchase prompt, print, and upscale tokens. 
-- **Updated Pricing Model** to Gigatokens (1B tokens) & Gigapixels (1B pixels)
-- **UI/UX** Structured site/sidebar layout with `Prompt`, `Print`, and `Pay` sections
-- **CSS Styling** Custom image loading animations and hover effects
-- **Square Web Payments API** Successfully integrated Square Web Payments API 
-- **Integrated Print Preview & Order Flow Tool** into a single component with a dynamically created mock-up of the generated image with tabs for Size, Quantity, Pricing and Resolution customization options.
-- **Integrated Caching Mechanism** - generated images are cached in local storage and reloaded when the user navigates back to the page.
+### Authentication and User Management
+- Authentication Provider: Integrated Netlify Identity for user authentication, session management, and role-based access controls (using JWT)
+
+### AI Integration
+- Inference Engine: Integrated the FAL.ai Node.js SDK with Proxy Mode configured to protect API keys in production
+- Inference Optimization: Slashed inference time and cost by switching to Flux.1|Dev model after testing with Flux.1|Pro
+- Model Selector: Implemented drop-down selector for Flux.1|Pro & Flux.1|Dev model options
+
+### Image Rendering and Upscaling
+- Image Rendering: Successfully generated and displayed images in the Next.js UI
+- [ENHANCE] Created Image Upscaler Component (needs to be integrated into print order flow)
+
+### Print Order Flow
+- Print Previewer: Added a print preview page with page, size, and format selector
+- Token Store: Added a payments page with an option to purchase prompt, print, and upscale tokens.
+- Updated Pricing Model: to Gigatokens (1B tokens) & Gigapixels (1B pixels)
+- Integrated Print Preview & Order Flow Tool: into a single component with a dynamically created mock-up of the generated image with tabs for Size, Quantity, Pricing, and Resolution customization options.
+
+### UI/UX and Styling
+- UI/UX: Structured site/sidebar layout with `Prompt`, `Print`, and `Pay` sections
+- CSS Styling: Custom image loading animations and hover effects
+
+### Payment Integration
+- Square Web Payments API: Successfully integrated Square Web Payments API
+
+### Caching
+- Integrated Caching Mechanism: Generated images are cached in local storage and reloaded when the user navigates back to the page.
+
+### Database Integration
+- Neon Serverless with PostgreSQL: Integrated Neon Serverless with PostgreSQL database for storing user data and order information.
+
+### CI/CD Deployment
+- Implemented Cloudflare CI/CD deployment integration for seamless deployment and continuous delivery of the application.
+- Pushed code to Github and linked to Cloudflare Pages for automatic deployment.
+
+### Webhooks and Notifications
+- Integrated Webhooks: Added webhooks for order confirmation and delivery notifications. /api/square-webhook.ts
+- Notifications: Implemented email notifications for order confirmation and delivery updates.
+
+## Key APIs, SDKs, and Endpoints:
+- **Netlify Identity**: Authentication and user management
+- **FAL.ai SDK**: AI image generation engine
+- **Square Web Payments API**: Payment processing
+- **Neon Serverless**: PostgreSQL database integration
+- **Cloudflare Pages**: CI/CD deployment
+- **Cloudflare Workers**: Webhooks and notifications
 
 
-## Key Features
+### Authentication
+- **Sign-in Endpoint**: Handles user sign-in requests.
+  - **File**: [`src/pages/api/auth/signin.tsx`](command:_github.copilot.openRelativePath?%5B%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%20Coding%20Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fauth%2Fsignin.tsx%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%5D "/Users/ajm/Documents/Code/2024 Coding Projects/testgitdir/src/pages/api/auth/signin.tsx")
+  - **Method**: [`POST`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22%24mid%22%3A1%2C%22fsPath%22%3A%22%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%20Coding%20Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fauth%2Fsignin.tsx%22%2C%22external%22%3A%22file%3A%2F%2F%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%2520Coding%2520Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fauth%2Fsignin.tsx%22%2C%22path%22%3A%22%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%20Coding%20Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fauth%2Fsignin.tsx%22%2C%22scheme%22%3A%22file%22%7D%2C%22pos%22%3A%7B%22line%22%3A6%2C%22character%22%3A22%7D%7D%2C%7B%22uri%22%3A%7B%22%24mid%22%3A1%2C%22fsPath%22%3A%22%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%20Coding%20Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fgenerate-image.ts%22%2C%22external%22%3A%22file%3A%2F%2F%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%2520Coding%2520Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fgenerate-image.ts%22%2C%22path%22%3A%22%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%20Coding%20Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fgenerate-image.ts%22%2C%22scheme%22%3A%22file%22%7D%2C%22pos%22%3A%7B%22line%22%3A7%2C%22character%22%3A22%7D%7D%5D%5D "Go to definition")
+  - **Description**: Authenticates users based on email and password.
+
+### Payment Processing
+- **Square Payment Endpoint**: Manages payment processing using Square Web Payments API.
+  - **File**: [`src/pages/api/square-payment.ts`](command:_github.copilot.openRelativePath?%5B%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%20Coding%20Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fsquare-payment.ts%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%5D "/Users/ajm/Documents/Code/2024 Coding Projects/testgitdir/src/pages/api/square-payment.ts")
+  - **Method**: [`POST`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22%24mid%22%3A1%2C%22fsPath%22%3A%22%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%20Coding%20Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fauth%2Fsignin.tsx%22%2C%22external%22%3A%22file%3A%2F%2F%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%2520Coding%2520Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fauth%2Fsignin.tsx%22%2C%22path%22%3A%22%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%20Coding%20Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fauth%2Fsignin.tsx%22%2C%22scheme%22%3A%22file%22%7D%2C%22pos%22%3A%7B%22line%22%3A6%2C%22character%22%3A22%7D%7D%2C%7B%22uri%22%3A%7B%22%24mid%22%3A1%2C%22fsPath%22%3A%22%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%20Coding%20Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fgenerate-image.ts%22%2C%22external%22%3A%22file%3A%2F%2F%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%2520Coding%2520Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fgenerate-image.ts%22%2C%22path%22%3A%22%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%20Coding%20Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fgenerate-image.ts%22%2C%22scheme%22%3A%22file%22%7D%2C%22pos%22%3A%7B%22line%22%3A7%2C%22character%22%3A22%7D%7D%5D%5D "Go to definition")
+  - **Description**: Processes payments securely.
+
+### Image Generation
+- **Generate Image Endpoint**: Generates images using the FAL.ai SDK.
+  - **File**: [`src/pages/api/generate-image.ts`](command:_github.copilot.openRelativePath?%5B%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%20Coding%20Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fgenerate-image.ts%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%5D "/Users/ajm/Documents/Code/2024 Coding Projects/testgitdir/src/pages/api/generate-image.ts")
+  - **Method**: [`POST`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22%24mid%22%3A1%2C%22fsPath%22%3A%22%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%20Coding%20Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fauth%2Fsignin.tsx%22%2C%22external%22%3A%22file%3A%2F%2F%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%2520Coding%2520Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fauth%2Fsignin.tsx%22%2C%22path%22%3A%22%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%20Coding%20Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fauth%2Fsignin.tsx%22%2C%22scheme%22%3A%22file%22%7D%2C%22pos%22%3A%7B%22line%22%3A6%2C%22character%22%3A22%7D%7D%2C%7B%22uri%22%3A%7B%22%24mid%22%3A1%2C%22fsPath%22%3A%22%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%20Coding%20Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fgenerate-image.ts%22%2C%22external%22%3A%22file%3A%2F%2F%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%2520Coding%2520Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fgenerate-image.ts%22%2C%22path%22%3A%22%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%20Coding%20Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fgenerate-image.ts%22%2C%22scheme%22%3A%22file%22%7D%2C%22pos%22%3A%7B%22line%22%3A7%2C%22character%22%3A22%7D%7D%5D%5D "Go to definition")
+  - **Description**: Generates AI-powered images based on user prompts.
+
+### Webhooks
+- **Square Webhook Endpoint**: Handles webhooks for order confirmation and delivery notifications.
+  - **File**: [`src/pages/api/square-webhook.ts`](command:_github.copilot.openRelativePath?%5B%7B%22scheme%22%3A%22file%22%2C%22authority%22%3A%22%22%2C%22path%22%3A%22%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%20Coding%20Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fsquare-webhook.ts%22%2C%22query%22%3A%22%22%2C%22fragment%22%3A%22%22%7D%5D "/Users/ajm/Documents/Code/2024 Coding Projects/testgitdir/src/pages/api/square-webhook.ts")
+  - **Method**: [`POST`](command:_github.copilot.openSymbolFromReferences?%5B%22%22%2C%5B%7B%22uri%22%3A%7B%22%24mid%22%3A1%2C%22fsPath%22%3A%22%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%20Coding%20Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fauth%2Fsignin.tsx%22%2C%22external%22%3A%22file%3A%2F%2F%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%2520Coding%2520Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fauth%2Fsignin.tsx%22%2C%22path%22%3A%22%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%20Coding%20Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fauth%2Fsignin.tsx%22%2C%22scheme%22%3A%22file%22%7D%2C%22pos%22%3A%7B%22line%22%3A6%2C%22character%22%3A22%7D%7D%2C%7B%22uri%22%3A%7B%22%24mid%22%3A1%2C%22fsPath%22%3A%22%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%20Coding%20Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fgenerate-image.ts%22%2C%22external%22%3A%22file%3A%2F%2F%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%2520Coding%2520Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fgenerate-image.ts%22%2C%22path%22%3A%22%2FUsers%2Fajm%2FDocuments%2FCode%2F2024%20Coding%20Projects%2Ftestgitdir%2Fsrc%2Fpages%2Fapi%2Fgenerate-image.ts%22%2C%22scheme%22%3A%22file%22%7D%2C%22pos%22%3A%7B%22line%22%3A7%2C%22character%22%3A22%7D%7D%5D%5D "Go to definition")
+  - **Description**: Processes webhook events from Square for order updates.
+
+### Proxy Configuration
+- **FAL Proxy Endpoint**: Configures proxy settings for FAL.ai SDK.
+  - **File**: src/pages/api/fal/proxy.ts
+  - **Method**: `GET`
+  - **Description**: Provides proxy configuration for FAL.ai SDK.
+
+
+### Key Features
 
 1. **User Management**: Registration, login, and profile management.
 2. **Subscription/Token System**: Flexible payment options for users.

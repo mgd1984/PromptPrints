@@ -4,14 +4,13 @@ import { AppProps } from 'next/app';
 import { useEffect, useState } from 'react';
 import netlifyAuth from '../netlifyAuth.js';
 import * as fal from "@fal-ai/serverless-client";
+import '../styles/globals.css';
  
 fal.config({
   proxyUrl: "/api/fal/proxy",
 });
 
 console.log(netlifyAuth);
-
-import '../styles/globals.css';
 
 interface User {
     id: string;
