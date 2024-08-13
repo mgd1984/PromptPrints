@@ -1,6 +1,8 @@
 // pages/api/orders/create.js
 import db from '../../../lib/db';
 
+export const runtime = 'edge';
+
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { user_id, status, total_price, shipping_address } = req.body;

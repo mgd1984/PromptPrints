@@ -1,6 +1,8 @@
 // pages/api/prompts/create.js
 import db from '../../../lib/db';
 
+export const runtime = 'edge';
+
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { user_id, content, status } = req.body;

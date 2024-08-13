@@ -2,6 +2,8 @@
 import db from '../../../lib/db';
 // import square from 'square-payment'; // Assuming you have square-payment module setup
 
+export const runtime = 'edge';
+
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { order_id, user_id, amount, currency } = req.body;

@@ -1,6 +1,9 @@
 import { config } from 'dotenv';
 import fs from 'fs';
 import { NextApiRequest, NextApiResponse } from 'next';
+
+export const runtime = 'edge';
+
 config();
 
 // Set up CUPS connection

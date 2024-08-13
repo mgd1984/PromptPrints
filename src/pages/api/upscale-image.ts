@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import * as fal from "@fal-ai/serverless-client";
 
+export const runtime = 'edge';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     try {
