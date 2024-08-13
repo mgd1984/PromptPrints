@@ -1,25 +1,29 @@
-import React from 'react';
+import React, { useEffect, ComponentType } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 
-// Define the HOC that takes a component as input
-const withAuth = (Component: React.ComponentType) => {
+const withAuth = (Component: ComponentType<any>) => {
   return (props: any) => {
-    // Use the Auth0 hook to access authentication state
     const { isAuthenticated, loginWithRedirect, isLoading } = useAuth0();
 
-    // Show a loading state while checking authentication
+    // Prevent the component from rendering if the authentication state is still loading
     if (isLoading) {
       return <div>Loading...</div>;
     }
 
-    // If the user is not authenticated, redirect to the login page
-    if (!isAuthenticated) {
-      loginWithRedirect();
-      return <div>Redirecting...</div>;
+    // Redirect only when the user is not authenticated and prevent further rendering
+    useEffect(() => {
+      if (!isAuthenticated) {
+        loginWithRedirect();
+      }
+    }, [isAuthenticated, loginWithRedirect]);
+
+    // Only render the component if the user is authenticated
+    if (isAuthenticated) {
+      return <Component {...props} />;
     }
 
-    // If the user is authenticated, render the wrapped component
-    return <Component {...props} />;
+    // Return null while redirecting to avoid any rendering
+    return null;
   };
 };
 
