@@ -3,21 +3,21 @@ import netlifyAuth from '../netlifyAuth';
 
 const NetlifyAuthClient = ({ onAuth }: { onAuth: (user: any) => void }) => {
   useEffect(() => {
-    console.log('Initializing NetlifyAuth...');
-    netlifyAuth.initialize((user: any) => {
-      console.log('NetlifyAuth initialized:', netlifyAuth);
-      if (user) {
-        onAuth(user);
-      }
-    });
+    if (typeof window !== 'undefined') {
+      netlifyAuth.initialize((user: any) => {
+        if (user) {
+          onAuth(user);
+        }
+      });
+    }
   }, [onAuth]);
 
   const handleSignIn = () => {
-    console.log('Handling sign in...');
-    netlifyAuth.authenticate((user: any) => {
-      console.log('Logged in user:', user);
-      onAuth(user);
-    });
+    if (typeof window !== 'undefined') {
+      netlifyAuth.authenticate((user: any) => {
+        onAuth(user);
+      });
+    }
   };
 
   return (
