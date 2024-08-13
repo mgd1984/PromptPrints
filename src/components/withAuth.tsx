@@ -1,28 +1,35 @@
-import React, { useEffect, ComponentType } from 'react';
+import React, { useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 
-const withAuth = (Component: ComponentType<any>) => {
+const withAuth = (Component: React.ComponentType<any>) => {
   return (props: any) => {
     const { isAuthenticated, loginWithRedirect, isLoading } = useAuth0();
 
+    // Debugging logs
+    console.log("isAuthenticated:", isAuthenticated);
+    console.log("isLoading:", isLoading);
+
     // Prevent the component from rendering if the authentication state is still loading
     if (isLoading) {
+      console.log("Loading authentication state...");
       return <div>Loading...</div>;
     }
 
-    // Redirect only when the user is not authenticated and prevent further rendering
     useEffect(() => {
       if (!isAuthenticated) {
+        console.log("User not authenticated, redirecting...");
         loginWithRedirect();
       }
     }, [isAuthenticated, loginWithRedirect]);
 
     // Only render the component if the user is authenticated
     if (isAuthenticated) {
+      console.log("User is authenticated, rendering component...");
       return <Component {...props} />;
     }
 
-    // Return null while redirecting to avoid any rendering
+    // Avoid rendering anything while redirecting
+    console.log("Returning null during redirection...");
     return null;
   };
 };
