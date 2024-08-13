@@ -31,7 +31,6 @@
     "ui": "github:shadcn/ui",
     "winston": "^3.14.1",
     "@reach/dialog": "^0.18.0"
-
   },
   "devDependencies": {
     "@types/json-bigint": "^1.0.4",
@@ -44,8 +43,6 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "@cloudflare/next-on-pages": "latest",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "wrangler": "^2.0.0" 
   }
 }
