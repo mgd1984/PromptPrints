@@ -3,11 +3,14 @@ import { SessionProvider } from 'next-auth/react';
 import { AppProps } from 'next/app';
 import { useEffect, useState } from 'react';
 import netlifyAuth from '../netlifyAuth.js';
+import * as fal from "@fal-ai/serverless-client";
+ 
+fal.config({
+  proxyUrl: "/api/fal/proxy",
+});
 
-// Check if the netlifyAuth module provides the 'on' function
 console.log(netlifyAuth);
 
-// Add your code here to handle the authentication logic
 import '../styles/globals.css';
 
 interface User {

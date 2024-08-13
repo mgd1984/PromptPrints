@@ -24,6 +24,7 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+    font-family: 'Roboto', sans-serif;
 }
 
 @layer utilities {
@@ -61,4 +62,27 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+/* Subtle gradient pulse animation */
+@keyframes subtlePulse {
+  0% {
+    opacity: 0.85;
+    background-position: 0% 50%;
+  }
+  50% {
+    opacity: 1;
+    background-position: 100% 50%;
+  }
+  100% {
+    opacity: 0.85;
+    background-position: 0% 50%;
+  }
+}
+
+.loading-container {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.05));
+  background-size: 200% 200%;
+  animation: subtlePulse 2.5s infinite ease-in-out;
+  border-radius: 0.5rem; /* To match the rounded corners of the image */
 }
