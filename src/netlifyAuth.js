@@ -1,46 +1,47 @@
-// netlifyAuth.js
-import netlifyIdentity from 'netlify-identity-widget';
-
 const netlifyAuth = {
   isInitialized: false,
   user: null,
 
   initialize(callback) {
-    netlifyIdentity.init();
-    netlifyIdentity.on('init', (user) => {
-      this.user = user;
-      this.isInitialized = true;
-      callback(user);
-    });
-    netlifyIdentity.on('login', (user) => {
-      this.user = user;
-      callback(user);
-    });
+    this.isInitialized = true;
+    const user = this.getUser();
+    callback(user);
+  },
+
+  getUser() {
+    const user = JSON.parse(localStorage.getItem('gotrue.user'));
+    this.user = user;
+    return user;
   },
 
   authenticate(callback) {
-    netlifyIdentity.open();
-    netlifyIdentity.on('login', (user) => {
-      this.user = user;
-      callback(user);
-      netlifyIdentity.close();
+    // Redirect to the Netlify Identity login page
+    window.location.href = "/.netlify/identity/login";
+
+    window.addEventListener('message', (event) => {
+      if (event.data && event.data.includes('authorization')) {
+        const user = this.getUser();
+        callback(user);
+      }
     });
   },
 
   signout(callback) {
-    netlifyIdentity.logout();
-    netlifyIdentity.on('logout', () => {
+    fetch('/.netlify/identity/logout', {
+      method: 'POST',
+    }).then(() => {
+      localStorage.removeItem('gotrue.user');
       this.user = null;
       callback();
     });
   },
 
   on(event, callback) {
-    netlifyIdentity.on(event, callback);
+    window.addEventListener(event, callback);
   },
 
   off(event, callback) {
-    netlifyIdentity.off(event, callback);
+    window.removeEventListener(event, callback);
   },
 };
 

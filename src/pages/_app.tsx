@@ -8,8 +8,6 @@ fal.config({
   proxyUrl: "/api/fal/proxy",
 });
 
-console.log(netlifyAuth);
-
 interface User {
   id: string;
   name: string;
