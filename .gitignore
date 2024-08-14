@@ -28,3 +28,9 @@ node_modules
 src/.DS_Store
 src/pages/.DS_Store
 
+src/docs/DataModel.md
+src/docs/nextSteps.md
+src/docs/OverviewDiagram.md
+src/docs/printQA.md
+OverviewDiagram.md
+DataModel.md

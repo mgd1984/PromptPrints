@@ -26,16 +26,18 @@ export default function Create() {
   const emojiSeries = ['🖼️', '🎨', '🖌️', '🖼️'];
 
   useEffect(() => {
-    // netlifyAuth.initialize((user: any) => {
-    //   setUser(user);
-    // });
+    if (isAuthenticated) {
+      setInputParam(user?.id || '');
+    }
+  }, [isAuthenticated, user]);
 
+  useEffect(() => {
     const cachedImage = localStorage.getItem('generatedImage');
     if (cachedImage) {
       setGeneratedImage(cachedImage);
     }
   }, []);
-
+  
   const generateImage = async () => {
     if (!user) {
       setError('User not authenticated');

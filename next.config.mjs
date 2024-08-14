@@ -1,14 +1,18 @@
 import { setupDevPlatform } from '@cloudflare/next-on-pages/next-dev';
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  images: {
+    domains: ['fal.media'],
+  },
+};
 
-if (process.env.NODE_ENV === 'development') {
-  await setupDevPlatform();
+async function setup() {
+  if (process.env.NODE_ENV === 'development') {
+    await setupDevPlatform();
+  }
 }
 
-nextConfig.images = {
-  domains: ['fal.media'],
-};
+setup().catch(console.error);
 
 export default nextConfig;
