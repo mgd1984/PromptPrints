@@ -4,12 +4,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 export default function Home() {
-  const { loginWithRedirect, logout, user, isAuthenticated, isLoading } = useAuth0();
+  // Inside your component
+  const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
   const [showTooltip, setShowTooltip] = useState(false);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-gray-900 to-black text-white">

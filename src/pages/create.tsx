@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import netlifyAuth from '../netlifyAuth'; // Ensure the path is correct
+// import netlifyAuth from '../netlifyAuth'; // Ensure the path is correct
+import { useAuth0 } from '@auth0/auth0-react';  // Ensure the path is correct
 import Link from 'next/link';
 import Image from 'next/image';
+import withAuth from '../components/withAuth';
 import Label from '@/components/ui/typography/Label';
 import { Input } from '@/components/ui/input';
 import Tabs from '@/components/ui/tabs/Tabs';
@@ -19,14 +21,14 @@ export default function Create() {
   const [currentEmojiIndex, setCurrentEmojiIndex] = useState(0);
   const [selectedModel, setSelectedModel] = useState('fal-ai/flux/dev');
   const [imageSize, setImageSize] = useState('landscape_4_3');
-  const [user, setUser] = useState<{ id: string } | null>(null);
-
+  // const [user, setUser] = useState<{ id: string } | null>(null);
+  const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
   const emojiSeries = ['🖼️', '🎨', '🖌️', '🖼️'];
 
   useEffect(() => {
-    netlifyAuth.initialize((user: any) => {
-      setUser(user);
-    });
+    // netlifyAuth.initialize((user: any) => {
+    //   setUser(user);
+    // });
 
     const cachedImage = localStorage.getItem('generatedImage');
     if (cachedImage) {
@@ -56,7 +58,7 @@ export default function Create() {
         setGeneratedImage(result.imageUrl);
         localStorage.setItem('generatedImage', result.imageUrl);
 
-        // Save the prompt to the database with Netlify user ID
+        // Save the prompt to the database with Auth0 user ID
         await savePromptToDatabase(result.imageUrl, user.id);
       } else {
         setError('Failed to generate image. Please try again.');
