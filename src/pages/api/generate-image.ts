@@ -5,6 +5,11 @@ export const config = {
   runtime: 'edge',
 };
 
+// Initialize Fal.ai client with API key
+fal.config({
+  credentials: process.env.FAL_KEY,
+});
+
 export default async function handler(req: NextRequest) {
   if (req.method !== 'POST') {
     return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
@@ -12,16 +17,22 @@ export default async function handler(req: NextRequest) {
 
   try {
     const { prompt, model, inputParam } = await req.json();
+    
+    // Validate inputs
+    if (!prompt) {
+      return NextResponse.json({ error: 'Prompt is required' }, { status: 400 });
+    }
+    if (!model) {
+      return NextResponse.json({ error: 'Model is required' }, { status: 400 });
+    }
+    // Add any other required field validations here
+    
     console.log('Received prompt:', prompt);
     console.log('Received model:', model);
     console.log('Received inputParam:', inputParam);
 
-    if (!model) {
-      throw new Error('Model is undefined');
-    }
-
     const result: any = await fal.subscribe(model, {
-      input: { prompt, inputParam },
+      input: { prompt, ...(inputParam && { inputParam }) },
       logs: true,
       onQueueUpdate: (update) => {
         if (update.status === "IN_PROGRESS") {
