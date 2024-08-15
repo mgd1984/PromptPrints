@@ -11,6 +11,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       console.log('Received model:', model); // Log the received model
       console.log('Received inputParam:', inputParam); // Log the received input parameter
 
+      if (!model) {
+        throw new Error('Model is undefined');
+      }
+
       // Use the selected model for image generation
       const result: any = await fal.subscribe(model, {
         input: { prompt, inputParam }, // Include input parameter in the request to fal
@@ -19,8 +23,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           if (update.status === "IN_PROGRESS") {
             console.log('Generation progress:', update.status);
             update.logs.map((log) => log.message).forEach(console.log);
-            // console.log('Fal AI result type:', typeof result);
-            // console.log('Fal AI result content:', JSON.stringify(result, null, 2));
+            console.log('Fal AI result type:', typeof result);
+            console.log('Fal AI result content:', JSON.stringify(result, null, 2));
           }
         },
       });
@@ -31,7 +35,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const imageUrl = result.images[0].url;
         console.log('Generated image URL:', imageUrl);
     
-        res.status(200).json({ imageUrl });
+        if (typeof res.status === 'function') {
+          res.status(200).json({ imageUrl });
+        } else {
+          throw new Error('res.status is not a function');
+        }
       } else {
         throw new Error('Image URL not found in the Fal AI response');
       }
