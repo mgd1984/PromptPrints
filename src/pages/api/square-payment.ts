@@ -1,3 +1,5 @@
+export const runtime = 'edge';
+
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Client, Environment, CreatePaymentRequest } from 'square';
 import JSONBig from 'json-bigint';
