@@ -50,7 +50,7 @@ export default function Payments() {
       if (result.status === 'OK') {
         const sourceId = result.token;
 
-        const response = await fetch('/api/square-payment', {
+        const response = await fetch('/api/payments/square-payment', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
