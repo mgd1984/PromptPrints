@@ -43,23 +43,32 @@ export default function Create() {
       setError('User not authenticated');
       return;
     }
-
+  
+    if (!prompt || !selectedModel || !inputParam || !imageSize) {
+      setError('All fields must be filled out before generating an image.');
+      return;
+    }
+  
     setIsGenerating(true);
     setError('');
     setGeneratedImage('');
-
+  
     try {
       const response = await fetch('/api/generate-image', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt, inputParam, model: selectedModel, imageSize }),
       });
-
+  
+      if (!response.ok) {
+        throw new Error('Failed to generate image');
+      }
+  
       const result = await response.json();
       if (result.imageUrl) {
         setGeneratedImage(result.imageUrl);
         localStorage.setItem('generatedImage', result.imageUrl);
-
+  
         // Save the prompt to the database with Auth0 user ID
         await savePromptToDatabase(result.imageUrl, user.id);
       } else {
