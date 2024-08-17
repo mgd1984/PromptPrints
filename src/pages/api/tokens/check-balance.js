@@ -1,5 +1,8 @@
 import db from '../../../lib/db';
 
+export const config = {
+  runtime: 'edge',
+};
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     const { user_id, tokens_required } = req.body;

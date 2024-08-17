@@ -1,6 +1,9 @@
 // pages/api/upsertUser.js
 import db from '../../lib/db'; // Adjust the import path as necessary
 
+export const config = {
+  runtime: 'edge',
+};
 export default async function handler(req, res) {
   if (req.method === 'POST') {
     const user = req.body;

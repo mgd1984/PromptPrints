@@ -8,9 +8,11 @@ import { logger } from '../../lib/logger'; // Assume we've set up a logging util
 
 dotenv.config();
 
+
 export const config = {
   api: {
     bodyParser: false,
+    runtime: 'edge',
   },
 };
 
