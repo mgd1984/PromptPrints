@@ -1,20 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Client, Environment, CreatePaymentRequest } from 'square';
 import JSONBig from 'json-bigint';
+import { v4 as uuidv4 } from 'uuid';
 
 export const config = {
   runtime: 'edge',
 };
-
-const crypto = require('crypto');
-
-const client = new Client({
-  environment: process.env.NODE_ENV === 'production' ? Environment.Production : Environment.Sandbox,
-  accessToken: process.env.SQ_ACCESS_TOKEN,
-});
-
-const paymentsApi = client.paymentsApi;
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', ['POST']);
@@ -28,27 +18,36 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const idempotencyKey = crypto.randomBytes(22).toString('hex');
-    const amountInCents = BigInt(Math.round(parseFloat(amount) * 100));
+    const idempotencyKey = uuidv4();
+    const amountInCents = JSONBig.stringify(Math.round(parseFloat(amount) * 100));
 
-    const requestBody: CreatePaymentRequest = {
-      idempotencyKey,
-      sourceId,
-      amountMoney: {
-        amount: amountInCents, // No need to convert BigInt to string here
-        currency: 'CAD', // Make sure this matches your Square account currency
+    const requestBody = {
+      idempotency_key: idempotencyKey,
+      source_id: sourceId,
+      amount_money: {
+        amount: amountInCents,
+        currency: 'CAD',
       },
     };
 
-    const { result } = await paymentsApi.createPayment(requestBody);
+    const response = await fetch('https://connect.squareup.com/v2/payments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.SQ_ACCESS_TOKEN}`,
+      },
+      body: JSON.stringify(requestBody),
+    });
 
-    if (result.payment) {
-      res.status(200).json(JSONBig.parse(JSONBig.stringify({ payment: result.payment })));
+    const result = await response.json();
+
+    if (response.ok && result.payment) {
+      res.status(200).json({ payment: result.payment });
     } else {
-      throw new Error('Payment creation failed');
+      throw new Error(result.errors ? result.errors[0].detail : 'Payment creation failed');
     }
   } catch (error) {
     console.error('Error processing payment:', error);
-    res.status(500).json({ error: (error as Error).message || 'An error occurred while processing the payment' });
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 }
