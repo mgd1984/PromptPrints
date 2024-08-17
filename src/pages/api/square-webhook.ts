@@ -10,9 +10,10 @@ dotenv.config();
 
 
 export const config = {
+  runtime: 'edge',
   api: {
     bodyParser: false,
-    runtime: 'edge',
+    
   },
 };
 
