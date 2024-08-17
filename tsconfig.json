@@ -21,6 +21,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/pages/api/fal/proxy/route.ts", "src/pages/api/fal/proxy/proxy.js", "src/pages/api/payments/square-payment.ts", "src/pages/api/auth/[...nextauth].ts.disabled"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/pages/api/fal/proxy/route.ts", "src/pages/api/fal/proxy/proxy.js", "src/pages/api/payments/square-payment.ts", "src/pages/api/auth/[...nextauth].ts.disabled", "src/pages/api/square-webhook.ts.disabled", "src/pages/api/square-webhook.ts.disabled"],
   "exclude": ["node_modules"]
 }
