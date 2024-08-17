@@ -1,16 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
 export default function Home() {
-  // Inside your component
   const { isAuthenticated, loginWithRedirect, logout, user } = useAuth0();
   const [showTooltip, setShowTooltip] = useState(false);
 
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      // Insert or update user information in the database via API route
+      fetch('/api/upsertUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      }).catch((error) => {
+        console.error('Error upserting user:', error);
+      });
+    }
+  }, [isAuthenticated, user]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-gray-900 to-black text-white">

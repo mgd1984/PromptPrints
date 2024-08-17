@@ -4,6 +4,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import withAuth from '../components/withAuth';
 import { Input } from '@/components/ui/input';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 function Create() {
   const [prompt, setPrompt] = useState('');
@@ -55,9 +58,25 @@ function Create() {
     setGeneratedImage('');
 
     try {
-      const response = await fetch('/api/generate-image', {
+      // Check token balance
+      const tokenCheckResponse = await fetch('/api/tokens/check-balance', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: user?.sub, tokens_required: 1 }), // Assuming 1 token per image generation
+      });
+
+      if (!tokenCheckResponse.ok) {
+        const tokenCheckError = await tokenCheckResponse.json();
+        throw new Error(tokenCheckError.error || 'Failed to check token balance');
+      }
+
+      // Generate image
+      const response = await fetch('/api/generate-image', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${process.env.FAL_KEY}`, // Access the FAL_KEY from the environment variable
+        },
         body: JSON.stringify({ prompt, inputParam, model: selectedModel, imageSize }),
       });
 
@@ -75,7 +94,7 @@ function Create() {
       }
     } catch (error) {
       console.error('Error generating image:', error);
-      setError('Failed to generate image. Please try again.');
+      setError((error as Error).message || 'Failed to generate image. Please try again.');
     } finally {
       setIsGenerating(false);
     }
@@ -93,11 +112,9 @@ function Create() {
           imageUrl,
         }),
       });
-
       if (!response.ok) {
         throw new Error('Failed to save prompt to database');
       }
-
       const data = await response.json();
       console.log('Prompt saved:', data.prompt);
     } catch (error) {
@@ -112,133 +129,35 @@ function Create() {
         <h2 className="text-3xl font-bold mb-8">Navigation</h2>
         <ul className="w-full">
           <li className="w-full">
-            <Link href="/">
-              <div className="block py-3 px-6 w-full text-left hover:bg-gray-700 rounded transition duration-300">Home</div>
+            <Link href="/" passHref>
+              <div className="block py-2 px-4 text-center hover:bg-gray-700">Home</div>
             </Link>
           </li>
-          <li className="w-full">
-            <Link href="/create">
-              <div className="block py-3 px-6 w-full text-left hover:bg-gray-700 rounded transition duration-300">Prompt</div>
-            </Link>
-          </li>
-          <li className="w-full">
-            <Link href="/print">
-              <div className="block py-3 px-6 w-full text-left hover:bg-gray-700 rounded transition duration-300">Print</div>
-            </Link>
-          </li>
-          <li className="w-full">
-            <Link href="/payments">
-              <div className="block py-3 px-6 w-full text-left bg-gray-700 rounded transition duration-300">
-                Pay
-              </div>
-            </Link>
-          </li>
+          {/* Add more navigation items here */}
         </ul>
       </div>
-
-      <div className="flex-1 flex flex-col min-h-screen ml-64 p-8">
-        {isGenerating ? (
-          <div className="flex-grow flex items-center justify-center mb-8">
-            <div className="max-w-4xl w-full bg-gray-800 rounded-lg overflow-hidden shadow-2xl flex items-center justify-center" style={{ paddingTop: '56.25%' }}>
-              <div className="text-6xl animate-spin">
-                {emojiSeries[currentEmojiIndex]}
-              </div>
-            </div>
-          </div>
-        ) : (
-          generatedImage && (
-            <div className="flex-grow flex items-center justify-center mb-8">
-              <div className="max-w-4xl w-full bg-gray-800 rounded-lg overflow-hidden shadow-2xl">
-                <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
-                  <Image
-                    src={generatedImage}
-                    alt="Generated Image"
-                    layout="fill"
-                    objectFit="contain"
-                    className="rounded-lg"
-                    onError={(e) => {
-                      console.error('Error loading image:', e);
-                      setError('Failed to load the generated image. Please try again.');
-                    }}
-                  />
-                </div>
-              </div>
-            </div>
-          )
-        )}
-
-        <div className={`w-full max-w-2xl mx-auto ${generatedImage ? 'mt-auto' : 'mt-20'}`}>
-          <div className="relative flex items-center">
-            <Input
-              type="text"
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              className="w-full p-4 bg-gray-800 text-white rounded-full border-none outline-none text-left pr-16"
-              placeholder="Enter your prompt"
-            />
-            <button
-              onClick={generateImage}
-              disabled={isGenerating}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600 transition-colors duration-300"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 transform rotate-90" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-              </svg>
-            </button>
-          </div>
-
-          <div className="mt-4">
-            <label htmlFor="model" className="block text-sm font-medium text-gray-300">Select Model</label>
-            <select
-              id="model"
-              value={selectedModel}
-              onChange={(e) => setSelectedModel(e.target.value)}
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-gray-800 text-white"
-            >
-              <option value="fal-ai/flux/dev">fal-ai/flux/dev</option>
-              <option value="fal-ai/flux/pro">fal-ai/flux/pro</option>
-            </select>
-          </div>
-
-          <div className="mt-4">
-            <label htmlFor='image_size' className="block text-sm font-medium text-gray-300">Select Image Size</label>
-            <select
-              id='image_size'
-              value={imageSize}
-              onChange={(e) => setImageSize(e.target.value)}
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md bg-gray-800 text-white"
-            >
-              <option value='square_hd'>Square HD</option>
-              <option value='square'>Square</option>
-              <option value='portrait_4_3'>Portrait 4:3</option>
-              <option value='portrait_16_9'>Portrait 16:9</option>
-              <option value='landscape_4_3'>Landscape 4:3</option>
-              <option value='landscape_16_9'>Landscape 16:9</option>
-            </select>
-          </div>
-
-          {error && (
-            <div className="mt-4 text-red-500 text-center">
-              {error}
-            </div>
-          )}
-        </div>
-
+      <div className="flex-1 flex flex-col items-center justify-center">
+        <h1 className="text-4xl font-bold mb-8">Create</h1>
+        <Input
+          type="text"
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          placeholder="Enter your prompt"
+          className="mb-4"
+        />
+        <button
+          onClick={generateImage}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          disabled={isGenerating}
+        >
+          {isGenerating ? emojiSeries[currentEmojiIndex] : 'Generate Image'}
+        </button>
+        {error && <p className="text-red-500 mt-4">{error}</p>}
         {generatedImage && (
-          <div className="text-center mt-8">
-            <Link href={`/print?imageUrl=${encodeURIComponent(generatedImage)}`}>
-              <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-full transition duration-300">
-                Proceed to Print
-              </button>
-            </Link>
+          <div className="mt-8">
+            <Image src={generatedImage} alt="Generated" width={500} height={500} />
           </div>
         )}
-
-        <footer className="text-center mt-8 w-full p-6">
-          <a href="https://blackforestlabs.ai" className="text-gray-500 hover:text-purple-500 transition duration-300">
-            Powered by BFL's FLUX.1 Model Fam
-          </a>
-        </footer>
       </div>
     </div>
   );
